@@ -1,5 +1,5 @@
 from datetime import datetime
-from modules.car import Car
+from lab_3.modules.car import Car
 
 
 class BMW(Car):

@@ -1,11 +1,11 @@
-from typing import overload
-from modules.car import Car
+from lab_3.modules.car import Car
 from datetime import datetime
 
 
 class Ford(Car):
 
     is_cabriolet: bool
+    allowed_fuel_types = ('gasoline', 'diesel')
 
     def __init__(self, color: str, manufacturer_country: str,
                  max_fuel: int, current_fuel: int, is_cabriolet: bool):
@@ -13,6 +13,9 @@ class Ford(Car):
         self.is_cabriolet = is_cabriolet
 
     def fill_fuel(self, intake_fuel: int, fuel_type: str = 'gasoline'):
+        if fuel_type not in self.allowed_fuel_types:
+            raise Exception("Bad Fuel!")
+
         free_fuel_space = self.max_fuel - self.current_fuel
         if intake_fuel > free_fuel_space:
             intake_fuel = free_fuel_space
@@ -20,10 +23,11 @@ class Ford(Car):
         self.current_fuel += intake_fuel
         current_datetime = datetime.now()
 
-        self.fuel_fills_history.append({'Дата заправки': current_datetime.date().strftime('%d/%m/%Y'),
-                                        'Время заправки': current_datetime.time().strftime('%H:%M:%S'),
-                                        'Количество залитых литров': intake_fuel,
-                                        'Тип топлива': fuel_type})
+        self.fuel_fills_history.append(
+            {'Дата заправки': current_datetime.date().strftime('%d/%m/%Y'),
+             'Время заправки': current_datetime.time().strftime('%H:%M:%S'),
+             'Количество залитых литров': intake_fuel,
+             'Тип топлива': fuel_type})
 
         return self.current_fuel
 

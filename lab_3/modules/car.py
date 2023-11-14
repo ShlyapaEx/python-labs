@@ -24,14 +24,16 @@ class Car:
         self.current_fuel += intake_fuel
         current_datetime = datetime.now()
 
-        self.fuel_fills_history.append({'Дата заправки': current_datetime.date().strftime('%d/%m/%Y'),
-                                        'Время заправки': current_datetime.time().strftime('%H:%M:%S'),
-                                        'Количество залитых литров': intake_fuel})
+        self.fuel_fills_history.append(
+            {'Дата заправки': current_datetime.date().strftime('%d/%m/%Y'),
+             'Время заправки': current_datetime.time().strftime('%H:%M:%S'),
+             'Количество залитых литров': intake_fuel})
 
         return self.current_fuel
 
     def get_last_fills(self, last_fills_count: int = 10):
-        return self.fuel_fills_history[-min(last_fills_count, len(self.fuel_fills_history)):]
+        return self.fuel_fills_history[-min(last_fills_count,
+                                            len(self.fuel_fills_history)):]
 
     def __lt__(self, other):
         return self.current_fuel < other.current_fuel
