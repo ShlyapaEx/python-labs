@@ -1,6 +1,7 @@
 # Получите содержимое 10 сайтов. Выполните задание в одном и в нескольких потоках.
 # Сравните результаты и время выполнения программы.
 
+import threading
 import requests
 from threading import Thread
 from concurrent.futures import ThreadPoolExecutor
@@ -47,7 +48,18 @@ def one_thread_get():
 
 
 @timing
-def many_thread_get():
+def threading_get():
+    threads = []
+    for site in sites:
+        thread = threading.Thread(target=get_site_content, args=(site,))
+        thread.start()
+        threads.append(thread)
+    for thread in threads:
+        thread.join()
+
+
+@timing
+def thread_pool_get():
     with ThreadPoolExecutor(max_workers=5) as executor:
         results = executor.map(get_site_content, sites)
 
@@ -56,7 +68,8 @@ def many_thread_get():
 
 def main():
     one_thread_get()  # 3.2, 2.7, 3.4, 3.1, 3.3, 2.9 | 4
-    many_thread_get()  # 2.6, 2.7, 2.3, 2.5 | 2
+    thread_pool_get()  # 2.6, 2.7, 2.3, 2.5 | 2
+    threading_get()
 
 
 if __name__ == "__main__":
